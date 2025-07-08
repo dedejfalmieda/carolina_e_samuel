@@ -1,0 +1,39 @@
+<!-- Adicione dentro do <body>, logo após o #mensagem -->
+
+<div id="linkWhatsapp" style="margin-top: 15px; text-align: center;"></div>
+
+<script>
+  // Dentro do evento do formulário, depois de mostrar a mensagem de obrigado, adiciona isso:
+
+  const telefoneWhatsApp = '5532991918933'; // Número do WhatsApp no formato internacional (55 + DDD + número)
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const nome = form.nome.value.trim();
+    const email = form.email.value.trim();
+    const presenca = form.presenca.value;
+
+    if (!nome || !email || !presenca) {
+      mensagem.style.color = 'red';
+      mensagem.textContent = 'Por favor, preencha todos os campos.';
+      return;
+    }
+
+    let confirmacoes = JSON.parse(localStorage.getItem('confirmacoes')) || [];
+    confirmacoes.push({ nome, email, presenca, data: new Date().toLocaleString() });
+    localStorage.setItem('confirmacoes', JSON.stringify(confirmacoes));
+
+    mensagem.style.color = 'green';
+    mensagem.textContent = `Obrigado, ${nome}! Sua presença foi registrada como "${presenca}".`;
+
+    // Criar link para WhatsApp com a mensagem pronta
+    const texto = `Olá! Confirmação de presença:\nNome: ${nome}\nE-mail: ${email}\nVai comparecer? ${presenca}`;
+    const urlWhatsapp = `https://wa.me/${telefoneWhatsApp}?text=${encodeURIComponent(texto)}`;
+
+    const linkWhatsappDiv = document.getElementById('linkWhatsapp');
+    linkWhatsappDiv.innerHTML = `<a href="${urlWhatsapp}" target="_blank" style="color:#075e54; font-weight:bold; font-size:16px;">Clique aqui para enviar sua confirmação pelo WhatsApp</a>`;
+
+    form.reset();
+  });
+</script>
