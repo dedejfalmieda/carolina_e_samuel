@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+  <meta charset="UTF-8">
+
+  <title>Confirme sua Presença - Carolina &amp; Samuel</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+
+    body {
+
+      font-family: 'Segoe UI', sans-serif;
+
+      background: url('https://raw.githubusercontent.com/dedejfalmieda/carolina_e_samuel/main/IMG-20250703-WA0041.jpg') no-repeat center center fixed;
+
+      background-size: cover;
+
+      margin: 0;
+
+      padding: 2rem;
+
+      color: #ffffff;
+
+      text-align: center;
+
+    }
+
+    h1 {
+
+      font-family: 'Great Vibes', cursive;
+
+      font-size: 3rem;
+
+      color: #ffffff;
+
+      margin-bottom: 0.5rem;
+
+      text-shadow: 1px 1px 5px #000;
+
+    }
+
+    h2 {
+
+      font-size: 1.25rem;
+
+      font-style: italic;
+
+      color: #f0e6ff;
+
+      margin-bottom: 2rem;
+
+      text-shadow: 1px 1px 3px #000;
+
+    }
+
+    blockquote {
+
+      font-size: 1.1rem;
+
+      font-style: italic;
+
+      color: #ffffff;
+
+      background-color: rgba(0, 0, 0, 0.5);
+
+      padding: 1rem;
+
+      max-width: 600px;
+
+      margin: 1rem auto 2rem auto;
+
+      border-left: 5px solid #ffffff;
+
+      border-radius: 10px;
+
+    }
+
+    form {
+
+      max-width: 400px;
+
+      margin: auto;
+
+      padding: 2rem;
+
+      border-radius: 15px;
+
+      backdrop-filter: blur(5px);
+
+      background-color: rgba(0, 0, 0, 0.4);
+
+    }
+
+    input, textarea, button {
+
+      width: 100%;
+
+      margin-top: 1rem;
+
+      padding: 0.75rem;
+
+      font-size: 1rem;
+
+      border-radius: 8px;
+
+      border: none;
+
+      box-sizing: border-box;
+
+      background: #ffffff;
+
+      color: #333;
+
+    }
+
+    button {
+
+      background-color: #a67fb8;
+
+      color: white;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+    }
+
+    button:hover {
+
+      background-color: #7a5ea3;
+
+    }
+
+    #mensagem-sucesso {
+
+      color: #90ee90;
+
+      margin-top: 1rem;
+
+    }
+
+    footer {
+
+      margin-top: 3rem;
+
+      background-color: rgba(0, 0, 0, 0.4);
+
+      padding: 2rem;
+
+      border-radius: 10px;
+
+      color: #fff;
+
+    }
+
+    footer h3 {
+
+      margin-bottom: 0.5rem;
+
+    }
+
+    footer p {
+
+      margin: 0.25rem;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <h1>Carolina &amp; Samuel</h1>
+
+  <h2>11 de outubro de 2025 · Paróquia Cristo Rei · Juiz de Fora – MG</h2>
+
+  <blockquote>
+
+    “O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha.”<br>
+
+    <strong>— 1 Coríntios 13:4</strong>
+
+  </blockquote>
+
+  <form id="form-confirmacao">
+
+    <input type="text" id="nome" placeholder="Seu nome completo" required="">
+
+    <textarea id="mensagem" placeholder="Deixe uma mensagem para os noivos (opcional)"></textarea>
+
+    <button type="submit">Confirmar Presença</button>
+
+    <div id="mensagem-sucesso"></div>
+
+  </form>
+
+  <footer>
+
+    <h3>📍 Local da cerimônia</h3>
+
+    <p>Paróquia Cristo Rei</p>
+
+    <p><em>R. Manoel Joaquim Taváres, 30 - Jardim do Sol, Juiz de Fora - MG</em></p>
+
+    <h3 style="margin-top: 2rem;">🎉 Recepção</h3>
+
+    <p><em>R. Barão do Retiro, 1230 - Bonfim, Juiz de Fora - MG</em></p>
+
+  </footer>
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    const firebaseConfig = {
+
+      apiKey: "SUA_API_KEY",
+
+      authDomain: "SEU_DOMINIO.firebaseapp.com",
+
+      databaseURL: "https://SEU_DOMINIO.firebaseio.com",
+
+      projectId: "SEU_PROJETO_ID",
+
+      storageBucket: "SEU_BUCKET.appspot.com",
+
+      messagingSenderId: "SEU_SENDER_ID",
+
+      appId: "SUA_APP_ID"
+
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(app);
+
+    const form = document.getElementById('form-confirmacao');
+
+    const sucesso = document.getElementById('mensagem-sucesso');
+
+    form.addEventListener('submit', (e) => {
+
+      e.preventDefault();
+
+      const nome = document.getElementById('nome').value.trim();
+
+      const mensagem = document.getElementById('mensagem').value.trim();
+
+      if (!nome) return;
+
+      const refPublico = ref(db, 'confirmacoes_publicas');
+
+      const refPrivado = ref(db, 'confirmacoes_privadas/carol_e_samuel');
+
+      push(refPublico, { nome, mensagem });
+
+      push(refPrivado, { nome, mensagem });
+
+      form.reset();
+
+      sucesso.textContent = 'Presença confirmada com carinho 💜 Muito obrigado!';
+
+    });
+
+  </script>
+
+
+
+
+
+<script defer="defer" data-domain="html.cafe" src="Confirme%20sua%20Presen%C3%A7a%20-%20Carolina%20&amp;%20Samuel_arquivos/script.js"></script>
+
+   </body></html>
